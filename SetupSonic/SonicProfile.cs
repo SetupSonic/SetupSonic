@@ -17,7 +17,6 @@ namespace SetupSonic
         public bool Hardcore { get; set; }
         public int RespecLevel { get => 24; }
         public string BeforeRespecBuild { get => "start"; }
-        public string AfterRespectBuild { get => Expansion ? "xblizzard" : "blizzard";  }
-        public bool IsRemovable { get => Profile != "all"; }
+        public string AfterRespecbuild { get => Expansion ? "xblizzard" : "blizzard";  }
     }
 }
