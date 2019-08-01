@@ -1,0 +1,99 @@
+﻿<Window x:Class="SetupSonic.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SetupSonic"
+        mc:Ignorable="d"
+        Title="Setup Sonic" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="8, 5, 8, 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition MaxWidth="80"></ColumnDefinition>
+                <ColumnDefinition MaxWidth="70"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock VerticalAlignment="Center">
+                <Hyperlink NavigateUri="blankrequired" RequestNavigate="Hyperlink_RequestNavigate">
+                    You must also configure D2Bot#. Click here to open a tutorial in your web browser
+                </Hyperlink>
+            </TextBlock>
+            <Button Grid.Column="1" Content="Save" Margin="5, 0, 5, 0" MinHeight="25" MinWidth="70" HorizontalAlignment="Right" Click="OnSaveClick"></Button>
+            <Button Grid.Column="2" Content="Quit" MinHeight="25" MinWidth="70" HorizontalAlignment="Right" Click="OnQuitClick"></Button>
+        </Grid>
+
+        <DataGrid x:Name="ProfileGrid" Grid.Row="1" ItemsSource="{Binding ProfileCollection}" Margin="8, 2, 8, 8" AutoGenerateColumns="False" CanUserAddRows="True">
+            <DataGrid.RowValidationRules>
+                <local:SonicValidator ValidationStep="UpdatedValue"></local:SonicValidator>
+            </DataGrid.RowValidationRules>
+            <DataGrid.Resources>
+                <Style x:Key="errorStyle" TargetType="{x:Type TextBox}">
+                    <Setter Property="Padding" Value="-2"/>
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter Property="Background" Value="Red"/>
+                            <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                              Path=(Validation.Errors)[0].ErrorContent}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.RowValidationErrorTemplate>
+                <ControlTemplate>
+                    <Grid Margin="0,-2,0,-2"
+                        ToolTip="{Binding RelativeSource={RelativeSource
+                        FindAncestor, AncestorType={x:Type DataGridRow}},
+                        Path=(Validation.Errors)[0].ErrorContent}">
+                        <Ellipse StrokeThickness="0" Fill="Red" 
+                          Width="{TemplateBinding FontSize}" 
+                          Height="{TemplateBinding FontSize}" />
+                        <TextBlock Text="!" FontSize="{TemplateBinding FontSize}" 
+                          FontWeight="Bold" Foreground="White" 
+                          HorizontalAlignment="Center"  />
+                    </Grid>
+                </ControlTemplate>
+            </DataGrid.RowValidationErrorTemplate>
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="D2Bot# Profile" Width="*"> <!--Binding="{Binding Path=Profile}"-->
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Profile">
+                            <Binding.ValidationRules>
+                                
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Account" Binding="{Binding Path=Account}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Password" Binding="{Binding Path=Password}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Character Name" Binding="{Binding Path=CharName}" Width="*"></DataGridTextColumn>
+                <DataGridComboBoxColumn 
+                    Header="Realm"
+                    MinWidth="100"
+                    SelectedValueBinding="{Binding Realm}" 
+                    DisplayMemberPath="DisplayName"
+                    SelectedValuePath="Value">
+
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="ItemsSource" Value="{Binding Path=DataContext.RealmChoiceList, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="ItemsSource" Value="{Binding Path=DataContext.RealmChoiceList, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridCheckBoxColumn Header="Ladder" Binding="{Binding Path=Ladder}" MinWidth="70"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Header="Expansion" Binding="{Binding Path=Expansion}" MinWidth="70"></DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Header="Hardcore" Binding="{Binding Path=Hardcore}" MinWidth="70"></DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
