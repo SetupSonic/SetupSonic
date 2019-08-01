@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using SetupSonic.Commands;
 using SetupSonic.Models;
 
@@ -38,7 +39,12 @@ namespace SetupSonic.ViewModels
         public int DownloadPercent
         {
             get => _downloadPercent;
-            set => SetProperty(ref _downloadPercent, value);
+            set {
+                Dispatcher.CurrentDispatcher.Invoke(delegate
+                {
+                    SetProperty(ref _downloadPercent, value);
+                });
+            }
         }
 
         public string ProgressText

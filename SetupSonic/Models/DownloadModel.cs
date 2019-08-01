@@ -18,7 +18,7 @@ namespace SetupSonic.Models
         {
             _vm = vm;
         }
-
+        
         public void StartDownload()
         {
             client = new WebClient();
